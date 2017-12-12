@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+    <listener>
+        <listener-class>
+            webapp.servlet.PropertyServletContextListener
+        </listener-class>
+    </listener>
+
+    <welcome-file-list>
+        <welcome-file>home</welcome-file>
+    </welcome-file-list>
+
+    <servlet>
+        <servlet-name>Home</servlet-name>
+        <servlet-class>webapp.servlet.HomeServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Home</servlet-name>
+        <url-pattern>/home</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LoadDocument</servlet-name>
+        <servlet-class>webapp.servlet.LoadDocumentServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoadDocument</servlet-name>
+        <url-pattern>/loadDocument</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ViewInformation</servlet-name>
+        <servlet-class>webapp.servlet.ViewInformationServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ViewInformation</servlet-name>
+        <url-pattern>/viewInformation</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ConvertDocument</servlet-name>
+        <servlet-class>webapp.servlet.ConvertingServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ConvertDocument</servlet-name>
+        <url-pattern>/convert</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ValidateDocument</servlet-name>
+        <servlet-class>webapp.servlet.ValidatingServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ValidateDocument</servlet-name>
+        <url-pattern>/validate</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DownloadPdf</servlet-name>
+        <servlet-class>webapp.servlet.DownloadPdfServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DownloadPdf</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
+
+</web-app>
