@@ -12,7 +12,7 @@
     <artifactId>lib</artifactId>
 
     <properties>
-        <openoffice.version>4.1.2</openoffice.version>
+        <libreoffice.version>5.4.2</libreoffice.version>
     </properties>
 
     <dependencies>
@@ -41,30 +41,30 @@
         </dependency>
 
         <dependency>
-            <groupId>org.openoffice</groupId>
+            <groupId>org.libreoffice</groupId>
             <artifactId>jurt</artifactId>
-            <version>${openoffice.version}</version>
+            <version>${libreoffice.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.libreoffice/juh -->
         <dependency>
-            <groupId>org.openoffice</groupId>
+            <groupId>org.libreoffice</groupId>
             <artifactId>juh</artifactId>
-            <version>${openoffice.version}</version>
+            <version>${libreoffice.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.libreoffice/ridl -->
         <dependency>
-            <groupId>org.openoffice</groupId>
+            <groupId>org.libreoffice</groupId>
             <artifactId>ridl</artifactId>
-            <version>${openoffice.version}</version>
+            <version>${libreoffice.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.libreoffice/unoil -->
         <dependency>
-            <groupId>org.openoffice</groupId>
+            <groupId>org.libreoffice</groupId>
             <artifactId>unoil</artifactId>
-            <version>${openoffice.version}</version>
+            <version>${libreoffice.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.openoffice/bootstrap-connector -->
@@ -73,6 +73,7 @@
             <artifactId>bootstrap-connector</artifactId>
             <version>0.1.1</version>
         </dependency>
+
 
     </dependencies>
 
