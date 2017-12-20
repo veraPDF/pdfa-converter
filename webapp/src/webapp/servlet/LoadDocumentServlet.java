@@ -78,6 +78,9 @@ public class LoadDocumentServlet extends HttpServlet {
                     session.setAttribute(STORAGE_DIRECTORY, storage);
                 }
             }
+            if (fileItems.isEmpty()) {
+                session.setAttribute(SERVICE_MESSAGE, "Please choose your document.");
+            }
         } catch (FileUploadBase.SizeLimitExceededException e) {
             session.setAttribute(SERVICE_MESSAGE, "Your file is greater than limit size 20MB.");
         } catch (FileUploadBase.InvalidContentTypeException e) {

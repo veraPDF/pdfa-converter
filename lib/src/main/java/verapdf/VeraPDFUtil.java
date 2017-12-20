@@ -27,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -42,22 +41,11 @@ public class VeraPDFUtil {
 
         VeraGreenfieldFoundryProvider.initialise();
 
-        return new String(getHtmlBytes(pdfFile));
-    }
-
-    private byte[] getXmlBytes(String pdfFile) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        final PrintStream out = System.out;
-        System.setOut(new PrintStream(baos));
-//        VeraPdfCli.main(new String[] {"-f", "1a", pdfFile});
-        System.setOut(out);
-        return baos.toByteArray();
+        return new String(getHtmlBytes(pdfFile)).replaceFirst("<td.*<b>File.*</td>", "<h3 style=\"margin: 5 0 5 0\">veraPDF validation report</h3>");
     }
 
     private static byte[] getHtmlBytes(String pdfFile) throws VeraPDFException, FileNotFoundException {
         ByteArrayInputStream bais = validateHtml(new FileInputStream(pdfFile));
-
-//        HTMLReport.writeHTMLReport();
 
         byte[] bytes = new byte[bais.available()];
         bais.read(bytes, 0, bais.available());

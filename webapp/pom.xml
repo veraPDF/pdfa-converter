@@ -55,14 +55,6 @@
                             </includes>
                             <targetPath>js</targetPath>
                         </resource>
-                        <resource>
-                            <directory>web/img</directory>
-                            <filtering>false</filtering>
-                            <includes>
-                                <include>**/*</include>
-                            </includes>
-                            <targetPath>img</targetPath>
-                        </resource>
                     </webResources>
                 </configuration>
             </plugin>

@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Logius</title>
+    <title>Logius document converter</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -38,12 +38,14 @@
 
         <!-- Main component for a primary marketing message or call to action -->
         <div align='left' style="padding: 12px" class="jumbotron">
+            <div class="form-group">
             <form id='file-form' enctype="multipart/form-data">
-                <label for="file-select">Choose file to upload</label>
-                <input id='file-select' type="file" name="aFile" value="Choose file">
+                <input id='file-select' class="filestyle" type="file" name="aFile" data-buttonText="Choose file"
+                       data-buttonBefore="true">
                 <br>
-                <input id='upload-button' type="submit" value="Click to convert" />
+                <input class="btn btn-default" id='upload-button' type="submit" value="Convert file" />
             </form>
+            </div>
         </div>
 
         <div id="loading_message"></div>
@@ -61,13 +63,15 @@
 <script src="js/jquery.min.js"></script>
 <%--<script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>--%>
 <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="js/ie10-viewport-bug-workaround.js"></script>
 
 <script>
     window.onload = function() {
         document.getElementById('file-form').action = sendDocument();
-    }
+    };
+    $(":file").filestyle({buttonBefore: true, 'icon': false});
 </script>
 
 <script>
@@ -106,11 +110,11 @@
 
             xhr.onload = function () {
                 if (xhr.status === 200) {
-                    document.getElementById("loading_message").innerHTML = "Office text document was uploaded.";
                     // File(s) uploaded.
                     $.post("./viewInformation", function (data) {
                         document.getElementById("information").innerHTML = data;
                         if (data == "") {
+                            document.getElementById("loading_message").innerHTML = "Office text document was uploaded.";
                             document.getElementById("converting_message").innerHTML = "Converting...";
                             $.post("./convert", function () {
                                 $.post("./viewInformation", function (data) {
@@ -119,7 +123,7 @@
                                     document.getElementById("information").innerHTML = data;
                                     if (data == "") {
                                         document.getElementById("converting_message").innerHTML +=
-                                            '<form method="get" action="./download"> <button type="submit">Download pdf file</button></form>';
+                                            '<form method="get" action="./download"> <button class="btn btn-primary" type="submit">Download pdf file</button></form>';
                                         document.getElementById("validating_message").innerHTML = "Validating...";
                                         $.post("./validate", function (data) {
                                             document.getElementById("validating_message").innerHTML = "<pre>" + data + "</pre>";
@@ -130,6 +134,8 @@
                                     }
                                 })
                             });
+                        } else {
+                            document.getElementById("loading_message").innerHTML = "";
                         }
                     })
                 } else {
