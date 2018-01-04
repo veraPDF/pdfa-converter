@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>root</artifactId>
+        <groupId>logius</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>lib</artifactId>
+
+    <properties>
+        <libreoffice.version>5.4.2</libreoffice.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.verapdf</groupId>
+            <artifactId>core</artifactId>
+            <version>[1.10.0,1.11.0)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.verapdf.apps</groupId>
+            <artifactId>greenfield-apps</artifactId>
+            <version>[1.10.0,1.11.0)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.verapdf</groupId>
+            <artifactId>validation-model</artifactId>
+            <version>[1.10.0,1.11.0)</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.libreoffice</groupId>
+            <artifactId>jurt</artifactId>
+            <version>${libreoffice.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.libreoffice/juh -->
+        <dependency>
+            <groupId>org.libreoffice</groupId>
+            <artifactId>juh</artifactId>
+            <version>${libreoffice.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.libreoffice/ridl -->
+        <dependency>
+            <groupId>org.libreoffice</groupId>
+            <artifactId>ridl</artifactId>
+            <version>${libreoffice.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.libreoffice/unoil -->
+        <dependency>
+            <groupId>org.libreoffice</groupId>
+            <artifactId>unoil</artifactId>
+            <version>${libreoffice.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.openoffice/bootstrap-connector -->
+        <dependency>
+            <groupId>org.openoffice</groupId>
+            <artifactId>bootstrap-connector</artifactId>
+            <version>0.1.1</version>
+        </dependency>
+
+
+    </dependencies>
+
+</project>
