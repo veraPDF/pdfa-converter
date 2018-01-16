@@ -23,7 +23,7 @@ import static webapp.SessionNameConstants.EXCEPTION;
 import static webapp.SessionNameConstants.SERVICE_MESSAGE;
 import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
-public class LoadDocumentServlet extends HttpServlet {
+public class UploadDocumentServlet extends HttpServlet {
     private String folder;
     private int maxFileSize = 20 * 1024 * 1024;
     private int maxMemSize = 20 * 1024 * 1024;
@@ -112,11 +112,5 @@ public class LoadDocumentServlet extends HttpServlet {
             extension = fileName.substring(i+1);
         }
         return extension;
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().removeAttribute(EXCEPTION);
-        req.getRequestDispatcher("./load_template.jsp").forward(req, resp);
     }
 }

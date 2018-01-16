@@ -40,33 +40,6 @@
             <version>2.5</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>jurt</artifactId>
-            <version>${libreoffice.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.libreoffice/juh -->
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>juh</artifactId>
-            <version>${libreoffice.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.libreoffice/ridl -->
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>ridl</artifactId>
-            <version>${libreoffice.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.libreoffice/unoil -->
-        <dependency>
-            <groupId>org.libreoffice</groupId>
-            <artifactId>unoil</artifactId>
-            <version>${libreoffice.version}</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.openoffice/bootstrap-connector -->
         <dependency>
             <groupId>org.openoffice</groupId>

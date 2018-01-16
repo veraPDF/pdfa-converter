@@ -56,6 +56,7 @@ public class ConvertingServlet extends HttpServlet {
     }
 
     private String getPdfFilename(String documentName) {
+        //TODO: fix this
         String[] parts = documentName.split("\\.");
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < parts.length - 1; i++) {
