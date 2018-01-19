@@ -1,4 +1,4 @@
-package openoffice;
+package util.openoffice;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.comp.helper.BootstrapException;
@@ -18,23 +18,37 @@ import java.io.File;
 import java.net.MalformedURLException;
 
 public class OpenOfficeUtil {
+    public static final String[] EXTENSIONS = {"doc", "docx", "xls", "xlsx", "ppt", "pptx",
+            "ods", "odt", "odp", "zip"};
+
     public static String officeDirectory = "";
 
-    public static void convert(String wordFile, String pdfFile)
-            throws BootstrapException, Exception, MalformedURLException {
+    public static String getExtension(String fileName) {
+        String extension = "";
+
+        int i = fileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = fileName.substring(i+1);
+        }
+        return extension;
+    }
+
+    public static void convert(File wordFile, File pdfFile)
+            throws BootstrapException, Exception, MalformedURLException, InterruptedException {
         try {
             XDesktop xDesktop = initialize();
             XComponent xComp = loadDocument(wordFile, xDesktop);
             saveToPDF(pdfFile, xComp);
 
             xDesktop.terminate();
-        } catch (BootstrapException | Exception | MalformedURLException e) {
+            Thread.sleep(1000);
+        } catch (BootstrapException | Exception | MalformedURLException | InterruptedException e) {
             e.printStackTrace();
             throw e;
         }
     }
 
-    private static void saveToPDF(String pdfFile, XComponent xComp) throws IOException, MalformedURLException {
+    private static void saveToPDF(File pdfFile, XComponent xComp) throws IOException, MalformedURLException {
         PropertyValue[] propertyValues;
 
         XStorable xStorable = UnoRuntime.queryInterface(XStorable.class, xComp);
@@ -61,27 +75,25 @@ public class OpenOfficeUtil {
         aMediaDescriptor[1].Value = propertyValues;
 
         // Appending the favoured extension to the origin document name
-        xStorable.storeToURL(new File(pdfFile).toURI().toURL().toString(), aMediaDescriptor);
+        xStorable.storeToURL(pdfFile.toURI().toURL().toString(), aMediaDescriptor);
 
         System.out.println("Saved " + pdfFile);
     }
 
-    private static XComponent loadDocument(String wordFile, XDesktop xDesktop)
-            throws IOException, IllegalArgumentException {
-        if (!new File(wordFile).canRead()) {
-            throw new RuntimeException("Cannot load template:" + new File(wordFile));
+    private static XComponent loadDocument(File wordFile, XDesktop xDesktop)
+            throws IOException, IllegalArgumentException, MalformedURLException {
+        if (!wordFile.canRead()) {
+            throw new RuntimeException("Cannot load template:" + wordFile);
         }
 
         XComponentLoader xCompLoader = UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-
-        String sUrl = "file:///" + wordFile;
 
         PropertyValue[] propertyValues = new PropertyValue[1];
         propertyValues[0] = new PropertyValue();
         propertyValues[0].Name = "Hidden";
         propertyValues[0].Value = Boolean.TRUE;
 
-        return xCompLoader.loadComponentFromURL(sUrl, "_blank", 0, propertyValues);
+        return xCompLoader.loadComponentFromURL(wordFile.toURI().toURL().toString(), "_blank", 0, propertyValues);
     }
 
     private static XDesktop initialize() throws BootstrapException, Exception {

@@ -2,7 +2,8 @@ package webapp.servlet;
 
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.uno.Exception;
-import openoffice.OpenOfficeUtil;
+import util.ZipManagerUtil;
+import util.openoffice.OpenOfficeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,58 +12,83 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.Arrays;
 import java.util.Properties;
 
-import static webapp.SessionNameConstants.DOC_FILE;
-import static webapp.SessionNameConstants.PDF_FILE;
+import static webapp.SessionNameConstants.UPLOADED_FILE;
+import static webapp.SessionNameConstants.DOWNLOAD_FILE;
 import static webapp.SessionNameConstants.SERVICE_MESSAGE;
 import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
 public class ConvertingServlet extends HttpServlet {
 
+    public static final String PDF_DIR_NAME = "pdfs";
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        String documentName = (String) session.getAttribute(DOC_FILE);
-        String storage = (String) session.getAttribute(STORAGE_DIRECTORY);
-        if (storage == null || documentName == null) {
+        String fileName = (String) session.getAttribute(UPLOADED_FILE);
+        String storagePath = (String) session.getAttribute(STORAGE_DIRECTORY);
+        if (storagePath == null || fileName == null) {
             resp.sendRedirect("./home");
             return;
         }
+        File storage = new File(storagePath);
+        File uploaded = new File(fileName);
 
-        final String pdfFilename = getPdfFilename(documentName);
-        String pdfFile = storage + pdfFilename;
-
-        Properties props = PropertyServletContextListener.getWebProperties();
-        String officeDirectory = props.getProperty("officeDir");
-        if (officeDirectory == null) {
-            session.setAttribute(SERVICE_MESSAGE,
-                                 "OpenOffice directory wasn't found.");
+        if (fileName.endsWith(".zip")) {
+            File unzippedDir = ZipManagerUtil.unzipFile(uploaded, "office");
+            File pdfDir = new File(storage, PDF_DIR_NAME);
+            pdfDir.mkdirs();
+            processDir(unzippedDir, pdfDir, session);
+            String uploadedName = uploaded.getName();
+            File resultZip = ZipManagerUtil.zipDirectory(pdfDir,
+                    uploadedName.substring(0, uploadedName.lastIndexOf(".")) + "_pdf");
+            session.setAttribute(DOWNLOAD_FILE, resultZip.getAbsolutePath());
         } else {
-            OpenOfficeUtil.officeDirectory = officeDirectory;
-            try {
-                OpenOfficeUtil.convert(storage + documentName, pdfFile);
-                if (!new File(pdfFile).exists()) {
-                    session.setAttribute(SERVICE_MESSAGE,
-                                         "Something was going wrong during converting.");
-                } else {
-                    session.setAttribute(PDF_FILE, pdfFilename);
-                }
-            } catch (Exception | BootstrapException e) {
-                session.setAttribute(SERVICE_MESSAGE,
-                                     "Something was going wrong during converting.");
+            File pdf = convertFile(uploaded, storage, session);
+            if (pdf != null) {
+                session.setAttribute(DOWNLOAD_FILE, pdf.getAbsolutePath());
             }
         }
     }
 
-    private String getPdfFilename(String documentName) {
-        //TODO: fix this
-        String[] parts = documentName.split("\\.");
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < parts.length - 1; i++) {
-            builder.append(parts[i]).append(".");
+    private void processDir(File dirToProcess, File pdfDir, HttpSession session) {
+        if (!dirToProcess.isDirectory()) {
+            throw new IllegalArgumentException("Argument dirToProcess has to be a directory");
         }
-        builder.append("pdf");
-        return builder.toString();
+        for (File f : dirToProcess.listFiles()) {
+            if (f.isDirectory()) {
+                File similarPDFDir = new File(pdfDir, f.getName());
+                similarPDFDir.mkdirs();
+                processDir(f, similarPDFDir, session);
+            } else {
+                String extension = OpenOfficeUtil.getExtension(f.getAbsolutePath());
+                if (Arrays.asList(OpenOfficeUtil.EXTENSIONS).contains(extension)) {
+                    convertFile(f, pdfDir, session);
+                }
+            }
+        }
+    }
+
+    private File convertFile(File document, File destination, HttpSession session) {
+        final String pdfFilename = getPdfFilename(document.getName());
+        File pdfFile = new File(destination, pdfFilename);
+        try {
+            OpenOfficeUtil.convert(document, pdfFile);
+            if (pdfFile.exists()) {
+                return pdfFile;
+            }
+        } catch (Exception | BootstrapException | MalformedURLException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        session.setAttribute(SERVICE_MESSAGE,
+                "Something was going wrong during converting.");
+        return null;
+    }
+
+    private String getPdfFilename(String documentName) {
+        return documentName.substring(0, documentName.lastIndexOf(".")) + ".pdf";
     }
 }
