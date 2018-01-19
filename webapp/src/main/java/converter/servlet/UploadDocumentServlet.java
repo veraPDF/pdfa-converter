@@ -1,5 +1,6 @@
-package webapp.servlet;
+package converter.servlet;
 
+import converter.SessionNameConstants;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
@@ -18,11 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
-
-import static webapp.SessionNameConstants.UPLOADED_FILE;
-import static webapp.SessionNameConstants.EXCEPTION;
-import static webapp.SessionNameConstants.SERVICE_MESSAGE;
-import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
 public class UploadDocumentServlet extends HttpServlet {
     private String folder;
@@ -75,33 +71,33 @@ public class UploadDocumentServlet extends HttpServlet {
                     File file = new File(storage + templateFileName);
                     fi.write(file);
 
-                    session.setAttribute(UPLOADED_FILE, file.getAbsolutePath());
-                    session.setAttribute(STORAGE_DIRECTORY, storage);
+                    session.setAttribute(SessionNameConstants.UPLOADED_FILE, file.getAbsolutePath());
+                    session.setAttribute(SessionNameConstants.STORAGE_DIRECTORY, storage);
                 }
             }
             if (fileItems.isEmpty()) {
-                session.setAttribute(SERVICE_MESSAGE, "Please choose your document.");
+                session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Please choose your document.");
             }
         } catch (FileUploadBase.SizeLimitExceededException e) {
-            session.setAttribute(SERVICE_MESSAGE, "Your file is greater than limit size 20MB.");
+            session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Your file is greater than limit size 20MB.");
         } catch (FileUploadBase.InvalidContentTypeException e) {
-            session.setAttribute(SERVICE_MESSAGE, "Please upload MS Office or OpenOffice file (supported extensions:" +
+            session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Please upload MS Office or OpenOffice file (supported extensions:" +
                                                   "doc, docx, xls, xlsx, ppt, pptx, ods, odt, odp).");
         } catch (FileUploadException e) {
             e.printStackTrace();
-            session.setAttribute(SERVICE_MESSAGE,
+            session.setAttribute(SessionNameConstants.SERVICE_MESSAGE,
                                  "Please update this page and try to upload your file again.");
         }
         catch (Exception | OutOfMemoryError ex) {
             ex.printStackTrace();
-            session.setAttribute(EXCEPTION, ex);
+            session.setAttribute(SessionNameConstants.EXCEPTION, ex);
         }
     }
 
     private void cleanSessionParams(HttpServletRequest request) {
         final HttpSession session = request.getSession();
-        session.removeAttribute(STORAGE_DIRECTORY);
-        session.removeAttribute(SERVICE_MESSAGE);
-        session.removeAttribute(EXCEPTION);
+        session.removeAttribute(SessionNameConstants.STORAGE_DIRECTORY);
+        session.removeAttribute(SessionNameConstants.SERVICE_MESSAGE);
+        session.removeAttribute(SessionNameConstants.EXCEPTION);
     }
 }

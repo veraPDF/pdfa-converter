@@ -1,11 +1,11 @@
-package webapp.servlet;
+package converter.servlet;
 
 import com.sun.star.comp.helper.BootstrapException;
 import com.sun.star.uno.Exception;
+import converter.SessionNameConstants;
 import util.ZipManagerUtil;
 import util.openoffice.OpenOfficeUtil;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,12 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
-import java.util.Properties;
-
-import static webapp.SessionNameConstants.UPLOADED_FILE;
-import static webapp.SessionNameConstants.DOWNLOAD_FILE;
-import static webapp.SessionNameConstants.SERVICE_MESSAGE;
-import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
 public class ConvertingServlet extends HttpServlet {
 
@@ -28,8 +22,8 @@ public class ConvertingServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         HttpSession session = req.getSession();
-        String fileName = (String) session.getAttribute(UPLOADED_FILE);
-        String storagePath = (String) session.getAttribute(STORAGE_DIRECTORY);
+        String fileName = (String) session.getAttribute(SessionNameConstants.UPLOADED_FILE);
+        String storagePath = (String) session.getAttribute(SessionNameConstants.STORAGE_DIRECTORY);
         if (storagePath == null || fileName == null) {
             resp.sendRedirect("./home");
             return;
@@ -45,11 +39,11 @@ public class ConvertingServlet extends HttpServlet {
             String uploadedName = uploaded.getName();
             File resultZip = ZipManagerUtil.zipDirectory(pdfDir,
                     uploadedName.substring(0, uploadedName.lastIndexOf(".")) + "_pdf");
-            session.setAttribute(DOWNLOAD_FILE, resultZip.getAbsolutePath());
+            session.setAttribute(SessionNameConstants.DOWNLOAD_FILE, resultZip.getAbsolutePath());
         } else {
             File pdf = convertFile(uploaded, storage, session);
             if (pdf != null) {
-                session.setAttribute(DOWNLOAD_FILE, pdf.getAbsolutePath());
+                session.setAttribute(SessionNameConstants.DOWNLOAD_FILE, pdf.getAbsolutePath());
             }
         }
     }
@@ -83,7 +77,7 @@ public class ConvertingServlet extends HttpServlet {
         } catch (Exception | BootstrapException | MalformedURLException | InterruptedException e) {
             e.printStackTrace();
         }
-        session.setAttribute(SERVICE_MESSAGE,
+        session.setAttribute(SessionNameConstants.SERVICE_MESSAGE,
                 "Something was going wrong during converting.");
         return null;
     }
