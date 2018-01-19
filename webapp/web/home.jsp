@@ -30,7 +30,7 @@
 
     <div id="main">
         <div>
-            <h3 style="font-weight: bold;">Logius office to PDF/A-1A converter</h3>
+            <h3 style="font-weight: bold;">Office to PDF/A-1A converter</h3>
             <p>
                 <span style="font-weight: bold; color: rgba(0, 0, 0, 0.5)">Convert MS Office or OpenOffice files (supported extensions: doc, docx, xls, xlsx, ppt, pptx, ods, odt, odp) into PDF/A-1 Level A document </span>
             </p>
