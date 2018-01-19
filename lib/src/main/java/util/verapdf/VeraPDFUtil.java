@@ -41,7 +41,11 @@ public class VeraPDFUtil {
             if (pdfFile.endsWith(".pdf")) {
                 htmlresult = htmlresult.replaceFirst("<td.*<b>File.*</td>", "<h3 style=\"margin: 5 0 5 0\">veraPDF validation report</h3>");
             } else {
-//                htmlresult = htmlresult.replaceFirst("<h.*Build Information.*</table>", "<h2 style=\"margin: 5 0 5 0\">veraPDF validation report</h2>");
+                int firstInd = htmlresult.indexOf("<h2>Build Information</h2>");
+                int lastInd = htmlresult.indexOf("<h2>Batch Summary</h2>");
+                htmlresult = htmlresult.substring(0, firstInd) +
+                        "<h2 style=\"margin: 5 0 5 0\">veraPDF validation report</h2>" +
+                        htmlresult.substring(lastInd);
                 htmlresult = htmlresult.replaceAll(pdfFile + "/", "");
             }
             return htmlresult;
