@@ -12,46 +12,44 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static webapp.SessionNameConstants.PDF_FILE;
+import static webapp.SessionNameConstants.DOWNLOAD_FILE;
 import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
 public class DownloadPdfServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse response) throws IOException {
         ServletContext context = getServletContext();
 
         final HttpSession session = req.getSession();
+        String downloadFile = (String) session.getAttribute(DOWNLOAD_FILE);
 
-        String storage = (String) session.getAttribute(STORAGE_DIRECTORY);
-        String pdfFile = (String) session.getAttribute(PDF_FILE);
-
-        if (pdfFile == null) {
+        if (downloadFile == null) {
             response.sendRedirect("./home");
             return;
         }
 
-        writeFile(response, context, session, new File(storage + pdfFile));
+        writeFile(response, context, new File(downloadFile));
     }
 
-    private void writeFile(HttpServletResponse response, ServletContext context, HttpSession session, File file)
+    private void writeFile(HttpServletResponse response, ServletContext context, File file)
             throws IOException {
-        InputStream fis = new FileInputStream(file);
-        String mimeType = context.getMimeType(file.getAbsolutePath());
-        response.setContentType(mimeType != null ? mimeType : "application/pdf");
-        response.setContentLength((int) file.length());
-        response.setHeader("Content-Disposition", "attachment; filename=\""
-                                                  + session.getAttribute(PDF_FILE) + "\"");
+        try (InputStream fis = new FileInputStream(file)) {
+            String mimeType = context.getMimeType(file.getAbsolutePath());
+            response.setContentType(mimeType != null ? mimeType : "application/pdf");
+            response.setContentLength((int) file.length());
+            response.setHeader("Content-Disposition", "attachment; filename=\""
+                    + file.getName() + "\"");
 
-        ServletOutputStream os = response.getOutputStream();
-        byte[] bufferData = new byte[1024];
-        int read = 0;
-        while ((read = fis.read(bufferData)) != -1) {
-            os.write(bufferData, 0, read);
+            ServletOutputStream os = response.getOutputStream();
+            byte[] bufferData = new byte[1024];
+            int read = 0;
+            while ((read = fis.read(bufferData)) != -1) {
+                os.write(bufferData, 0, read);
+            }
+            os.flush();
+            os.close();
         }
-        os.flush();
-        os.close();
-        fis.close();
     }
 
 }

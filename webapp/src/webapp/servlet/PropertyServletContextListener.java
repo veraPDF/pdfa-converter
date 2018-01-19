@@ -1,6 +1,8 @@
 package webapp.servlet;
 
 import org.apache.commons.io.FileCleaner;
+import util.openoffice.OpenOfficeUtil;
+import util.verapdf.VeraPDFUtil;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -26,6 +28,8 @@ public class PropertyServletContextListener implements ServletContextListener {
         }
         try {
             webProperties.load(new FileInputStream(propertiesFile));
+//            VeraPDFUtil.initialize(webProperties.getProperty("veraPDF"));
+			OpenOfficeUtil.officeDirectory = webProperties.getProperty("officeDir");
         } catch (IOException e) {
             e.printStackTrace();
         }

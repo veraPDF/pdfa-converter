@@ -5,6 +5,7 @@ import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import util.openoffice.OpenOfficeUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,12 +19,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import static webapp.SessionNameConstants.DOC_FILE;
+import static webapp.SessionNameConstants.UPLOADED_FILE;
 import static webapp.SessionNameConstants.EXCEPTION;
 import static webapp.SessionNameConstants.SERVICE_MESSAGE;
 import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
 
-public class LoadDocumentServlet extends HttpServlet {
+public class UploadDocumentServlet extends HttpServlet {
     private String folder;
     private int maxFileSize = 20 * 1024 * 1024;
     private int maxMemSize = 20 * 1024 * 1024;
@@ -64,8 +65,8 @@ public class LoadDocumentServlet extends HttpServlet {
                         templateFileName = fileName.substring(fileName.lastIndexOf("\\") + 1);
                     }
 
-                    if (!Arrays.asList("doc", "docx", "xls", "xlsx", "ppt", "pptx",
-                                       "ods", "odt", "odp").contains(getExtension(templateFileName))) {
+                    String extension = OpenOfficeUtil.getExtension(templateFileName);
+                    if (!Arrays.asList(OpenOfficeUtil.EXTENSIONS).contains(extension) && !"zip".equals(extension)) {
                         throw new FileUploadBase.InvalidContentTypeException();
                     }
 
@@ -74,7 +75,7 @@ public class LoadDocumentServlet extends HttpServlet {
                     File file = new File(storage + templateFileName);
                     fi.write(file);
 
-                    session.setAttribute(DOC_FILE, templateFileName);
+                    session.setAttribute(UPLOADED_FILE, file.getAbsolutePath());
                     session.setAttribute(STORAGE_DIRECTORY, storage);
                 }
             }
@@ -102,21 +103,5 @@ public class LoadDocumentServlet extends HttpServlet {
         session.removeAttribute(STORAGE_DIRECTORY);
         session.removeAttribute(SERVICE_MESSAGE);
         session.removeAttribute(EXCEPTION);
-    }
-
-    private String getExtension(String fileName) {
-        String extension = "";
-
-        int i = fileName.lastIndexOf('.');
-        if (i > 0) {
-            extension = fileName.substring(i+1);
-        }
-        return extension;
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getSession().removeAttribute(EXCEPTION);
-        req.getRequestDispatcher("./load_template.jsp").forward(req, resp);
     }
 }

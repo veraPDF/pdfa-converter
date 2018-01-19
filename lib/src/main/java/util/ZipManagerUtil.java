@@ -8,13 +8,13 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Maksim Bezrukov
  */
-public class ZipManager {
+public class ZipManagerUtil {
 
-    public static File zipDirectory(File dirToZip) throws IOException {
+    public static File zipDirectory(File dirToZip, String fileName) throws IOException {
         if (!dirToZip.isDirectory()) {
             throw new IllegalArgumentException("Argument shall be an existing directory");
         }
-        File res = new File(dirToZip.getParent(), dirToZip.getName() + ".zip");
+        File res = new File(dirToZip.getParent(), fileName + ".zip");
         try (FileOutputStream fos = new FileOutputStream(res);
              ZipOutputStream zipOut = new ZipOutputStream(fos)) {
             for (File file : dirToZip.listFiles()) {
@@ -25,8 +25,11 @@ public class ZipManager {
         return res;
     }
 
-    public static File unzipFile(File zipFile) throws IOException {
-        File dir = new File(zipFile.getParentFile(), getDirName(zipFile.getName()));
+    public static File unzipFile(File zipFile, String dirName) throws IOException {
+        if (dirName == null) {
+            dirName = getDirName(zipFile.getName());
+        }
+        File dir = new File(zipFile.getParentFile(), dirName);
         if (!dir.exists()) {
             dir.mkdirs();
         }
@@ -34,17 +37,19 @@ public class ZipManager {
              ZipInputStream zis = new ZipInputStream(fis)) {
             ZipEntry ze = zis.getNextEntry();
             while (ze != null) {
-                String fileName = ze.getName();
-                File newFile = new File(dir, fileName);
-                File parentFile = newFile.getParentFile();
-                if (!parentFile.exists()) {
-                    parentFile.mkdirs();
-                }
-                try (FileOutputStream fos = new FileOutputStream(newFile)) {
-                    int len;
-                    byte[] buffer = new byte[1024];
-                    while ((len = zis.read(buffer)) > 0) {
-                        fos.write(buffer, 0, len);
+                if (!ze.isDirectory()) {
+                    String fileName = ze.getName();
+                    File newFile = new File(dir, fileName);
+                    File parentFile = newFile.getParentFile();
+                    if (!parentFile.exists()) {
+                        parentFile.mkdirs();
+                    }
+                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                        int len;
+                        byte[] buffer = new byte[1024];
+                        while ((len = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
                     }
                 }
                 zis.closeEntry();

@@ -106,7 +106,7 @@
             var xhr = new XMLHttpRequest();
 
             // Open the connection.
-            xhr.open('POST', './loadDocument', true);
+            xhr.open('POST', './uploadDocument', true);
 
             xhr.onload = function () {
                 if (xhr.status === 200) {

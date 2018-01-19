@@ -1,8 +1,8 @@
 package webapp;
 
 public class SessionNameConstants {
-    public static final String DOC_FILE = "office_document";
-    public static final String PDF_FILE = "pdf_document";
+    public static final String UPLOADED_FILE = "uploaded_file";
+    public static final String DOWNLOAD_FILE = "download_file";
 
     public static final String STORAGE_DIRECTORY = "storage";
 

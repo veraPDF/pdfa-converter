@@ -25,13 +25,13 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>LoadDocument</servlet-name>
-        <servlet-class>webapp.servlet.LoadDocumentServlet</servlet-class>
+        <servlet-name>UploadDocument</servlet-name>
+        <servlet-class>webapp.servlet.UploadDocumentServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>LoadDocument</servlet-name>
-        <url-pattern>/loadDocument</url-pattern>
+        <servlet-name>UploadDocument</servlet-name>
+        <url-pattern>/uploadDocument</url-pattern>
     </servlet-mapping>
 
     <servlet>
