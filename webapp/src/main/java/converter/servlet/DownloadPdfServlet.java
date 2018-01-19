@@ -1,7 +1,8 @@
-package webapp.servlet;
+package converter.servlet;
+
+import converter.SessionNameConstants;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,9 +13,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static webapp.SessionNameConstants.DOWNLOAD_FILE;
-import static webapp.SessionNameConstants.STORAGE_DIRECTORY;
-
 public class DownloadPdfServlet extends HttpServlet {
 
     @Override
@@ -22,7 +20,7 @@ public class DownloadPdfServlet extends HttpServlet {
         ServletContext context = getServletContext();
 
         final HttpSession session = req.getSession();
-        String downloadFile = (String) session.getAttribute(DOWNLOAD_FILE);
+        String downloadFile = (String) session.getAttribute(SessionNameConstants.DOWNLOAD_FILE);
 
         if (downloadFile == null) {
             response.sendRedirect("./home");

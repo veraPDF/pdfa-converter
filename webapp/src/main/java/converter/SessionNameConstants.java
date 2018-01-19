@@ -1,4 +1,4 @@
-package webapp;
+package converter;
 
 public class SessionNameConstants {
     public static final String UPLOADED_FILE = "uploaded_file";

@@ -153,3 +153,5 @@ nbactions*.xml
 
 webapp/web/resources/**
 
+**/config.dev
+

@@ -6,7 +6,7 @@
 
     <listener>
         <listener-class>
-            webapp.servlet.PropertyServletContextListener
+            converter.servlet.PropertyServletContextListener
         </listener-class>
     </listener>
 
@@ -16,7 +16,7 @@
 
     <servlet>
         <servlet-name>Home</servlet-name>
-        <servlet-class>webapp.servlet.HomeServlet</servlet-class>
+        <servlet-class>converter.servlet.HomeServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -26,7 +26,7 @@
 
     <servlet>
         <servlet-name>UploadDocument</servlet-name>
-        <servlet-class>webapp.servlet.UploadDocumentServlet</servlet-class>
+        <servlet-class>converter.servlet.UploadDocumentServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>ViewInformation</servlet-name>
-        <servlet-class>webapp.servlet.ViewInformationServlet</servlet-class>
+        <servlet-class>converter.servlet.ViewInformationServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -46,7 +46,7 @@
 
     <servlet>
         <servlet-name>ConvertDocument</servlet-name>
-        <servlet-class>webapp.servlet.ConvertingServlet</servlet-class>
+        <servlet-class>converter.servlet.ConvertingServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -56,7 +56,7 @@
 
     <servlet>
         <servlet-name>ValidateDocument</servlet-name>
-        <servlet-class>webapp.servlet.ValidatingServlet</servlet-class>
+        <servlet-class>converter.servlet.ValidatingServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -66,7 +66,7 @@
 
     <servlet>
         <servlet-name>DownloadPdf</servlet-name>
-        <servlet-class>webapp.servlet.DownloadPdfServlet</servlet-class>
+        <servlet-class>converter.servlet.DownloadPdfServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
