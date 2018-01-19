@@ -114,7 +114,7 @@
                     $.post("./viewInformation", function (data) {
                         document.getElementById("information").innerHTML = data;
                         if (data == "") {
-                            document.getElementById("loading_message").innerHTML = "Office text document was uploaded.";
+                            document.getElementById("loading_message").innerHTML = "Document was uploaded.";
                             document.getElementById("converting_message").innerHTML = "Converting...";
                             $.post("./convert", function () {
                                 $.post("./viewInformation", function (data) {
@@ -123,7 +123,7 @@
                                     document.getElementById("information").innerHTML = data;
                                     if (data == "") {
                                         document.getElementById("converting_message").innerHTML +=
-                                            '<form method="get" action="./download"> <button class="btn btn-primary" type="submit">Download pdf file</button></form>';
+                                            '<form method="get" action="./download"> <button class="btn btn-primary" type="submit">Download file</button></form>';
                                         document.getElementById("validating_message").innerHTML = "Validating...";
                                         $.post("./validate", function (data) {
                                             document.getElementById("validating_message").innerHTML = "<pre>" + data + "</pre>";
