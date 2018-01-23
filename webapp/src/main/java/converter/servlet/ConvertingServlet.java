@@ -35,7 +35,10 @@ public class ConvertingServlet extends HttpServlet {
             File unzippedDir = ZipManagerUtil.unzipFile(uploaded, "office");
             File pdfDir = new File(storage, PDF_DIR_NAME);
             pdfDir.mkdirs();
-            processDir(unzippedDir, pdfDir, session);
+            long totalFiles = processDir(unzippedDir, pdfDir, session);
+            if (totalFiles == 0) {
+                session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Uploaded zip file doesn't contain any office documents");
+            }
             String uploadedName = uploaded.getName();
             File resultZip = ZipManagerUtil.zipDirectory(pdfDir,
                     uploadedName.substring(0, uploadedName.lastIndexOf(".")) + "_pdf");
@@ -48,7 +51,8 @@ public class ConvertingServlet extends HttpServlet {
         }
     }
 
-    private void processDir(File dirToProcess, File pdfDir, HttpSession session) {
+    private long processDir(File dirToProcess, File pdfDir, HttpSession session) {
+        long res = 0;
         if (!dirToProcess.isDirectory()) {
             throw new IllegalArgumentException("Argument dirToProcess has to be a directory");
         }
@@ -56,14 +60,16 @@ public class ConvertingServlet extends HttpServlet {
             if (f.isDirectory()) {
                 File similarPDFDir = new File(pdfDir, f.getName());
                 similarPDFDir.mkdirs();
-                processDir(f, similarPDFDir, session);
+                res += processDir(f, similarPDFDir, session);
             } else {
                 String extension = OpenOfficeUtil.getExtension(f.getAbsolutePath());
                 if (Arrays.asList(OpenOfficeUtil.EXTENSIONS).contains(extension)) {
                     convertFile(f, pdfDir, session);
+                    ++res;
                 }
             }
         }
+        return res;
     }
 
     private File convertFile(File document, File destination, HttpSession session) {
