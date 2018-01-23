@@ -1,5 +1,6 @@
 package converter.servlet;
 
+import converter.CleanerService;
 import org.apache.commons.io.FileCleaner;
 import util.openoffice.OpenOfficeUtil;
 import util.verapdf.VeraPDFUtil;
@@ -30,6 +31,8 @@ public class PropertyServletContextListener implements ServletContextListener {
             webProperties.load(new FileInputStream(propertiesFile));
 //            VeraPDFUtil.initialize(webProperties.getProperty("veraPDF"));
 			OpenOfficeUtil.officeDirectory = webProperties.getProperty("officeDir");
+            CleanerService cs = new CleanerService(webProperties.getProperty("dir.temp"));
+            cs.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
