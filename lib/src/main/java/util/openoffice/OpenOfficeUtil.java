@@ -19,7 +19,7 @@ import java.net.MalformedURLException;
 
 public class OpenOfficeUtil {
     public static final String[] EXTENSIONS = {"doc", "docx", "xls", "xlsx", "ppt", "pptx",
-            "ods", "odt", "odp", "zip"};
+            "ods", "odt", "odp", "rtf"};
 
     public static String officeDirectory = "";
 
