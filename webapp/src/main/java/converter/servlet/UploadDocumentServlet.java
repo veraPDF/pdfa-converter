@@ -82,7 +82,7 @@ public class UploadDocumentServlet extends HttpServlet {
             session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Your file is greater than limit size 20MB.");
         } catch (FileUploadBase.InvalidContentTypeException e) {
             session.setAttribute(SessionNameConstants.SERVICE_MESSAGE, "Please upload MS Office or OpenOffice file (supported extensions:" +
-                                                  "doc, docx, xls, xlsx, ppt, pptx, ods, odt, odp).");
+                                                  "doc, docx, xls, xlsx, ppt, pptx, ods, odt, odp, rtf, zip).");
         } catch (FileUploadException e) {
             e.printStackTrace();
             session.setAttribute(SessionNameConstants.SERVICE_MESSAGE,
